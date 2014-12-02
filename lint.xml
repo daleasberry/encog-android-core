@@ -2,6 +2,5 @@
 <lint>
     <issue id="MissingApplicationIcon">
         <ignore path="src/main/AndroidManifest.xml" />
-        <ignore path="src/main/AndroidManifest.xml" />
     </issue>
 </lint>
