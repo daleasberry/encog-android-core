@@ -1,77 +1,17 @@
-apply plugin: 'android'
-apply plugin: 'eclipse'
+apply plugin: 'java'
 apply plugin: 'maven'
-
-buildscript {
-	repositories { mavenCentral() }
-
-	dependencies { classpath 'com.android.tools.build:gradle:0.14.4' }
-}
-
-android {
-	buildToolsVersion "21.1.1"
-	compileSdkVersion 21
-}
-
-android.applicationVariants.all { variant ->
-	task("generate${variant.name.capitalize()}Javadoc", type: Javadoc) {
-		title = "Documentation for Android $android.defaultConfig.versionName b$android.defaultConfig.versionCode"
-		destinationDir = new File("${project.getProjectDir()}/doc/compiled/", variant.baseName)
-		source = variant.javaCompile.source
-
-		ext.androidJar = "${android.sdkDirectory}/platforms/${android.compileSdkVersion}/android.jar"
-		classpath = files(variant.javaCompile.classpath.files) + files(ext.androidJar)
-
-		description "Generates Javadoc for $variant.name."
-
-		options.memberLevel = org.gradle.external.javadoc.JavadocMemberLevel.PRIVATE
-		options.links("http://docs.oracle.com/javase/7/docs/api/");
-		options.links("http://developer.android.com/reference/reference/");
-		exclude '**/BuildConfig.java'
-		exclude '**/R.java'
-	}
-
-    task("bundleJavadoc${variant.name.capitalize()}", type: Jar) {
-        description "Bundles Javadoc into zip for $variant.name."
-        classifier = "javadoc"
-        from tasks["generate${variant.name.capitalize()}Javadoc"]
-    }
-}
-
-sourceSets {
-	main.java.srcDirs = ['src/main/java']
-	main.resources.srcDirs = ['res']
-}
-
-def props = new Properties();
-def localProperties = new File("local.properties")
-if (localProperties.exists()) localProperties.withInputStream { props.load(it) }
-
-group = props.get('group')
-version = props.get('version')
-
-configurations { deployerJars }
 
 repositories { mavenCentral() }
 
-dependencies { deployerJars 'org.apache.maven.wagon:wagon-ssh:2.1' }
-
-task sourcesJar(type: Jar) {
-	classifier = 'sources'
-	from sourceSets.main.allSource
+dependencies {
+	compile files('C:/Users/Dale/git/ojil-core/build/libs/ojil-core.jar')
+	compile files('C:/Android/android-sdk/platforms/android-21/android.jar')
 }
 
-artifacts {
-	archives sourcesJar
-}
-
-uploadArchives {
-	repositories {
-		mavenDeployer {
-			configuration = configurations.deployerJars
-			repository(url: props.get('maven.repository.url')) {
-				authentication(userName: props.get('maven.repository.user'), password: props.get('maven.repository.password'))
-			}
+if (JavaVersion.current().isJava8Compatible()) {
+	allprojects {
+		tasks.withType(Javadoc) {
+			options.addStringOption('Xdoclint:none', '-quiet')
 		}
 	}
 }

@@ -42,6 +42,8 @@ public interface Universe {
 	void randomize();
 	
 	UniverseCellFactory getCellFactory();
+	
+	ImageFactory getImageFactory();
 
 	double calculatePercentInvalid();
 

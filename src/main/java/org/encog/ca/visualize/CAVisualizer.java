@@ -23,7 +23,8 @@
  */
 package org.encog.ca.visualize;
 
-import java.awt.Image;
+import com.github.ojil.core.Image;
+
 
 public interface CAVisualizer {
 

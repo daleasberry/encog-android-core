@@ -2,4 +2,4 @@ group=org.encog
 version=3.1.0
 
 #change the following property to reflect the actual location of the Android SDK
-sdk.dir=C\:/Android/android-sdk
+sdk.dir=

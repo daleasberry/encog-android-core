@@ -2,7 +2,7 @@
  * Encog(tm) Core v3.3 - Java Version
  * http://www.heatonresearch.com/encog/
  * https://github.com/encog/encog-java-core
- 
+
  * Copyright 2008-2014 Heaton Research, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,42 +16,40 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *   
- * For more information on Heaton Research copyrights, licenses 
+ * 
+ * For more information on Heaton Research copyrights, licenses
  * and trademarks visit:
  * http://www.heatonresearch.com/copyright
  */
 package org.encog.ca.visualize.basic;
-
-import java.awt.Image;
-import java.awt.image.BufferedImage;
-import java.awt.image.WritableRaster;
 
 import org.encog.ca.universe.DiscreteCell;
 import org.encog.ca.universe.Universe;
 import org.encog.ca.universe.UniverseCell;
 import org.encog.ca.visualize.CAVisualizer;
 
+import com.github.ojil.core.Image;
+
 public class BasicCAVisualizer implements CAVisualizer {
-	private Universe universe;
+	private final Universe universe;
 	private int currentZoom;
 	private int zoom = 1;
 	private int width;
 	private int height;
-	private int[] pixels;
-	private BufferedImage currentImage;
-	private WritableRaster raster;
+	private Integer[] pixels;
+	private Integer[] raster;
+	private Image currentImage;
 
-	public BasicCAVisualizer(Universe theUniverse) {
-		this.universe = theUniverse;
+	public BasicCAVisualizer(final Universe theUniverse) {
+		universe = theUniverse;
 	}
 
-	private void fillCell(int row, int col, UniverseCell cell) {
+	private void fillCell(final int row, final int col, final UniverseCell cell) {
 
-		for (int y = 0; y < this.currentZoom; y++) {
+		for (int y = 0; y < currentZoom; y++) {
 			int idx = (((row * currentZoom) + y) * (width * currentZoom) * 3)
 					+ ((col * currentZoom) * 3);
-			for (int x = 0; x < this.currentZoom; x++) {
+			for (int x = 0; x < currentZoom; x++) {
 				if (cell instanceof DiscreteCell) {
 					if (cell.get(0) > 0) {
 						pixels[idx++] = 255;
@@ -64,50 +62,50 @@ public class BasicCAVisualizer implements CAVisualizer {
 					}
 				} else {
 					for (int i = 0; i < 3; i++) {
-						double d = (cell.get(i) + 1.0) / 2.0;
-						pixels[idx++] = Math.min((int) (d * 255.0),255);
+						final double d = (cell.get(i) + 1.0) / 2.0;
+						pixels[idx++] = Math.min((int) (d * 255.0), 255);
 					}
 				}
 			}
 		}
 	}
 
+	@Override
 	public Image visualize() {
-		this.currentZoom = this.zoom;
-		this.width = universe.getColumns();
-		this.height = universe.getRows();
+		currentZoom = zoom;
+		width = universe.getColumns();
+		height = universe.getRows();
 
-		int imageSize = width * height * currentZoom * currentZoom * 3;
+		final int imageSize = width * height * currentZoom * currentZoom * 3;
 
-		if (this.pixels == null || this.pixels.length != imageSize) {
+		if ((pixels == null) || (pixels.length != imageSize)) {
 
-			this.currentImage = new BufferedImage(width * currentZoom, height
-					* currentZoom, BufferedImage.TYPE_INT_RGB);
-			this.raster = this.currentImage.getRaster();
-			this.pixels = new int[imageSize];
+			currentImage = universe.getImageFactory().createImage(
+					width * currentZoom, height * currentZoom,
+					Image.TYPE_INT_RGB);
+			raster = (Integer[]) currentImage.getData();
+			pixels = new Integer[imageSize];
 		}
 
 		for (int row = 0; row < height; row++) {
 			for (int col = 0; col < width; col++) {
-				UniverseCell cell = universe.get(row, col);
+				final UniverseCell cell = universe.get(row, col);
 				fillCell(row, col, cell);
 			}
 		}
 
-		raster.setPixels(0, 0, width * this.currentZoom, height
-				* this.currentZoom, pixels);
+		System.arraycopy(pixels, 0, raster, 0, pixels.length);
 
-		return this.currentImage;
-
+		return currentImage;
 	}
 
 	@Override
 	public int getZoom() {
-		return this.zoom;
+		return zoom;
 	}
 
 	@Override
-	public void setZoom(int z) {
-		this.zoom = z;
+	public void setZoom(final int z) {
+		zoom = z;
 	}
 }
