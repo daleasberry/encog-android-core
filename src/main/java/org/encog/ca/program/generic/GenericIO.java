@@ -23,13 +23,9 @@
  */
 package org.encog.ca.program.generic;
 
-import java.awt.Image;
-import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
-
-import javax.imageio.ImageIO;
 
 import org.encog.ca.CellularAutomataError;
 import org.encog.ca.program.CAProgram;
@@ -39,6 +35,8 @@ import org.encog.ca.visualize.basic.BasicCAVisualizer;
 import org.encog.persist.EncogDirectoryPersistence;
 import org.encog.util.file.FileUtil;
 import org.encog.util.obj.SerializeObject;
+
+import com.github.ojil.core.Image;
 
 public class GenericIO {
 	

@@ -29,6 +29,7 @@ import org.encog.ca.universe.UniverseCell;
 import org.encog.ca.visualize.CAVisualizer;
 
 import com.github.ojil.core.Image;
+import com.github.ojil.core.ImageType;
 
 public class BasicCAVisualizer implements CAVisualizer {
 	private final Universe universe;
@@ -82,7 +83,7 @@ public class BasicCAVisualizer implements CAVisualizer {
 
 			currentImage = universe.getImageFactory().createImage(
 					width * currentZoom, height * currentZoom,
-					Image.TYPE_INT_RGB);
+					ImageType.INT_RGB);
 			raster = (Integer[]) currentImage.getData();
 			pixels = new Integer[imageSize];
 		}

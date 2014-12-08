@@ -37,11 +37,11 @@ import org.encog.util.csv.CSVFormat;
 public abstract class BasicML implements MLMethod, MLProperties, Serializable {
 
 	/**
-	 * Serial id.
-	 */
-	private static final long serialVersionUID = 1L;
-
-	/**
+     * 
+     */
+    
+    private static final long serialVersionUID = 603203633756209718L;
+    /**
 	 * Properties about the neural network. Some NeuralLogic classes require
 	 * certain properties to be set.
 	 */
